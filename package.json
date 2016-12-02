@@ -5,7 +5,13 @@
   "main": "index.js",
   "author": "David G. Chaves <davidgchaves@gmail.com>",
   "license": "MIT",
-  "scripts": { },
+  "scripts": {
+    "standard": "standard",
+    "lint": "eslint js/**/*.js js/**/*.jsx webpack.config.js",
+    "dev": "webpack-dev-server",
+    "build": "webpack",
+    "watch": "webpack --watch"
+  },
   "dependencies": {
     "axios": "0.15.2",
     "express": "4.14.0",

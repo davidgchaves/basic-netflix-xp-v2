@@ -3,13 +3,14 @@
 ## Install and run
 
 ```console
-✔ npm install
+✔ npm install --global yarn
+✔ yarn
 ✔ npm run build
 ✔ npm run server
 ```
 
 
-## TODO
+## TODO v1
 
 1. Refactor to use `HOC`s, where possible.
 2. Use [`recompose`](https://github.com/acdlite/recompose) to simulate Lifecycle events.
@@ -18,77 +19,140 @@
 5. Find a reliable solution (if possible) that allows `ES6` modules and `webpack`'s `require.ensure`.
 
 
+## TODO v2
+
+1. Fix those pesky `npm install --global`.
+
+
 ## Global installs (making `Spacemacs` happy)
 
 ```console
-✔ npm install -g standard
+✔ npm install --global standard
 ```
 
-### Reminder in case you decide to switch back to `eslint` (TODOs 3 and 4)
+### Reminder in case you decide to switch back to `eslint` (TODOs v1 3 and 4)
 
 ```console
 ✔ npm install --global eslint eslint-config-standard eslint-config-standard-react eslint-config-standard-jsx eslint-plugin-babel eslint-plugin-promise eslint-plugin-standard eslint-plugin-react
 ```
 
+
 ## Links and Resources
 
-- [Brian's Notes](http://btholt.github.io/complete-intro-to-react/)
+### Links
+
+- [Brian's Notes v1](https://btholt.github.io/complete-intro-to-react-v1)
+- [Brian's Notes v2](https://btholt.github.io/complete-intro-to-react/all.html)
 - [Brian's Fluent 2016 Code](https://github.com/btholt/complete-intro-to-react)
 
 ### Tools
 
-- [`Standard`](https://github.com/feross/standard)
+- [`standard`](https://github.com/feross/standard)
 - [`standard-format`](https://github.com/maxogden/standard-format): Converts your code into `Standard` JavaScript Format.
 - [`standard-react`](https://www.npmjs.com/package/standard-react): Extra `standard` rules for `React`.
 - [JavaScript Standard Style](https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style): A TL;DR of the `standard` JavaScript rules.
-- [`Radium`](http://stack.formidable.com/radium/): Inline styles on React elements.
+- [`radium`](http://stack.formidable.com/radium): Inline styles on `react` elements.
+- [`aphrodite`](https://github.com/Khan/aphrodite): Inline styles that work!.
+- [`emmet`](http://emmet.io/): Plugin for many popular text editors which greatly improves HTML & CSS workflow.
+- [VimBox](https://github.com/jordwalke/VimBox): Simple, Modern MacVim Configuration by @jordwalke.
 
-## Goal
+
+## 0. Goal
 
 The goal of this workshop is to get you full up to speed on modern development and give you an idea what it is like to develop an app in the `react` ecosystem.
 
 In addition to `react`, we are going to be using `node`, `express`, `redux`, `webpack`, `mocha`, `enzyme`, `npm`, and `react-router`.
 
-## 1. `Props`
 
-- `Props` are variables that you pass from the `parent` to the `child`.
-- The `child` cannot modify the `props` it gets.
-- When bugs arise in the future, you know the `child` didn't modify the variable because it can't.
+## 1. Tooling
 
-## 2. Tooling
+### `yarn`
+
+```console
+✔ npm install --global yarn
+```
+#### Basic Usage
+
+Instead of:
+
+- `npm install`, run `yarn`.
+- `npm install --save react`, run `yarn add react`.
+- `npm install --global nodemon`, run `yarn global add nodemon`.
+
+Rule of thumb:
+
+- Use `yarn` for Apps.
+- Use `npm` for Libraries.
+
+#### Cool stuff
+
+Try `yarn update-interactive`.
 
 ### `standard`
 
-- `standard` is a linting tool.
--  just run `standard` from your terminal and see if you have any issues.
+```console
+✔ npm install --global standard
+```
 
+`standard` is a linting tool.
 
-### `Babel 6`
+- Run `standard` from your terminal and see if you have any issues.
+- Run `standard --fix` from your terminal to automatically fix some of those issues.
 
-#### `Babel 6` plugins
+### `babel 6`
 
-- `Babel 6` has the concept of plugins.
-- Each `Babel 6` transformation comes in the form a plugin.
+#### `babel 6` plugins
 
-#### `Babel 6` presets
+- `babel 6` has the concept of plugins.
+- Each `babel 6` transformation comes in the form a plugin.
 
-- `Babel 6` has the concept of presets (bundles of plugins).
-- `ES6` and `React` has their own preset.
+#### `babel 6` presets
+
+- `babel 6` has the concept of presets (bundles of plugins).
+- `es2015` and `react` has their own preset.
+
+#### `.babelrc` for development
+
+It is ok to use presets:
 
 `.babelrc`
 
 ```json
 {
-  "presets": ["react", "es2015", "stage-2"]
+  "presets": [
+    "react",
+    ["es2015", { "modules": false, "loose": true }]
+  ]
 }
 ```
 
-#### `Babel 6` in production
+Why `{ "modules": false }`?
+So `webpack 2` can take care of the `modules` (and not `babel 6`) and do `tree shaking`.
 
-- Only include the transformations you need.
+Why `{ "loose": true }`?
+It reduces the bundle size, but be careful because it's going to bite you in edge cases.
 
+#### `.babelrc` for production
 
-### `Webpack`
+Only include the `es2015` transformations (plugins) you need:
+
+`.babelrc`
+
+```json
+{
+  "presets": ["react"],
+  "plugins": [
+    "...",
+    "..."
+  ]
+}
+```
+
+### `webpack`
+
+```console
+✔ npm install --global webpack@v2.1.0-beta.25
+```
 
 Two of `webpack`'s core features:
 
@@ -104,20 +168,20 @@ Build for `webpack` is pretty slow:
 `Webpack` loaders are black boxes where `webpack`:
 
 - pipe input into...
-- ...accept output out of
+- ...accept output out of.
 
 #### What are `webpack` loaders useful for?
 
 Use loaders to:
 
-- transpile
-- include CSS
-- include inline images via encoding
-- transform SVGs
+- transpile,
+- include CSS,
+- include inline images via encoding,
+- transform SVGs.
 
 #### `babel-loader`
 
-Transpile our code using `Babel 6`.
+Transpile our code using `babel 6`.
 
 #### `eslint-loader`
 
@@ -127,9 +191,22 @@ Run `standard` for us.
 
 Require in `json` files.
 
+#### `style-loader` and `css-loader`
+
+We need two loaders to load CSS:
+
+- The `style-loader` takes the finished, parsed CSS and then bundles that into your JS bundle.
+- The `css-loader` lets `webpack` understand CSS (without it `webpack` doesn't parse CSS).
+- You could just as easy put the `less-loader` or `postcss-loader` instead of the `css-loader` if you wanted to have an augmented CSS language to work with.
+- The `{ url: false }` option for the `css-loader` is so that the `css-loader` doesn’t attempt to bundle your images into your JS bundle too.
+- **GOTCHA**: All our CSS is going to be in `bundle.js`:
+  - You have to wait for you js to load before your css load.
+  - NOT A GOOD IDEA.
+  - Bearable in development.
+
 #### A basic `webpack` config file
 
-A good way to send your code through `Babel 6` is via `webpack` loader mechanism:
+A good way to send your code through `babel 6` is via `webpack` loader mechanism:
 
 `webpack.config.js`
 
@@ -138,14 +215,17 @@ const path = require('path')
 
 module.exports = {
   context: __dirname,
-  entry: './js/index.js',
+  entry: './js/index.jsx',
+  devtool: 'eval',
   output: {
     path: path.join(__dirname, '/public'),
-    filename: 'bundle.js',
+    filename: 'bundle.js'
+  },
+  devServer: {
     publicPath: '/public/'
   },
   resolve: {
-    extensions: ['', '.js', '.jsx', '.json']
+    extensions: ['.js', '.jsx', '.json']
   },
   stats: {
     colors: true,
@@ -153,26 +233,40 @@ module.exports = {
     chunks: true
   },
   module: {
-    preLoaders: [
+    rules: [
       {
+        enforce: 'pre',
         test: /\.jsx?$/,
-        loader: 'babel-loader',
-        include: path.join(__dirname, '/js')
-      }
-    ],
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        loader: 'eslint-loader'
+        loader: 'eslint-loader',
+        exclude: /node_modules/
       },
       {
-        test: /\.json$/,
-        loader: 'json-loader'
+        include: path.resolve(__dirname, 'js'),
+        test: /\.jsx?$/,
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: { url: false }
+          }
+        ]
       }
     ]
   }
 }
 ```
+
+
+## 2. `Props`
+
+- `Props` are variables that you pass from the `parent` to the `child`.
+- The `child` cannot modify the `props` it gets.
+- When bugs arise in the future, you know the `child` didn't modify the variable because it can't.
+
 
 ## 3. JSX
 
@@ -182,6 +276,8 @@ module.exports = {
 - *JS in markup is a bad thing!*
 
 ### Components
+
+Components in `react` are nothing but functions.
 
 We're keeping all the concerns of a component in one place:
 
@@ -198,6 +294,7 @@ It doesn't actually matter if you use `.js` or `.jsx` extension, since both are 
 
 But it does signify to all who follow that `*.jsx`  files **must be** compiled before being shipped out.
 
+
 ## 4. The *basic Netflix experience* App
 
 Our app is going to have:
@@ -206,7 +303,7 @@ Our app is going to have:
 - a browse/search page
 - a video page
 
-All CSS is pre-done
+All CSS is pre-done.
 
 ### Radium
 
