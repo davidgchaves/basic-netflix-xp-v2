@@ -1,7 +1,11 @@
 import React from 'react'
+import ShowCard from './ShowCard'
+import preload from '../public/data'
 
 const Search = () => (
-  <h1>Search Page</h1>
+  <div className='search'>
+    {preload.shows.map(show => <ShowCard {...show} key={show.imdbID} />)}
+  </div>
 )
 
 export default Search

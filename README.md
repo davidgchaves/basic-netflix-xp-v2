@@ -242,6 +242,10 @@ module.exports = {
         exclude: /node_modules/
       },
       {
+        test: /\.json$/,
+        loader: 'json-loader'
+      },
+      {
         include: path.resolve(__dirname, 'js'),
         test: /\.jsx?$/,
         loader: 'babel-loader'
@@ -316,27 +320,51 @@ All CSS is pre-done.
 
 When coding `React`, assume you have all the data you need coming in via `props` and then figure out later how to get it there.
 
-### React State
 
-#### `props`
+## 5. React State
 
-- `props` are passed down from parents to children
-- `props` are immutable
+### Debugging trick
 
-#### `state`
+Useful to dump your `props`, `params` or `state` (any JSON data) to the page.
+
+```javascript
+<pre><code>
+  {JSON.stringify(this.props.params, null, 2)}
+</code></pre>
+```
+
+```javascript
+import preload from '../public/data'
+
+const Search = () => (
+  <div className='search'>
+    <pre><code>
+      {JSON.stringify(preload, null, 2)}
+    </code></pre>
+  </div>
+)
+```
+
+### `props`
+
+- `props` are passed down from parents to children.
+- `props` are immutable.
+
+### `state`
 
 - `state` is created, read, and mutated all inside of a component.
 - If a component has `state`, that `state` cannot be mutated by a parent, child, or any other external influence.
 - The only way to (sanely) mutate `state` is through the `setState` method.
 
-#### mutating parent's `state`
+### mutating parent's `state`
 
 A parent component has the ability to expose functions to children so the child can invoke them and let the parent know it should mutate its `state`:
 
 - It is totally up to the parent to respect that call and mutate the `state`.
 - The child can only invoke functions exposed to it via passed-down `props`.
 
-## 5. Testing
+
+## 6. Testing
 
 ### Setup
 
@@ -360,32 +388,8 @@ it('renders our brand', () => {
 
 *I don't test my UI code ever. My UI is ever shifting and in reality, I don't much care if my markup changes. I expect to as we design and iterate on the website. However I do test the hell out of my business logic which I'll separate into small modules.*
 
-## 6. Whatever
 
-
-### Debugging trick
-
-Useful to dump your `props`, `params` or `state` to the page.
-
-```javascript
-<pre style={{ textAlign: 'left' }}><code>
-  {JSON.stringify(this.props.params, null, 4)}
-</code></pre>
-```
-
-```javascript
-class Details extends React.Component {
-  render () {
-    return (
-      <div className='container'>
-        <pre style={{ textAlign: 'left' }}><code>
-          {JSON.stringify(this.props.params, null, 4)}
-        </code></pre>
-      </div>
-    )
-  }
-}
-```
+## 7. Whatever
 
 ### Sharing data
 
@@ -410,7 +414,7 @@ There's at least 3 ways to do this:
 3. We could hook into `onEnter` `callback` (from `react-router`) for the route, grab the data that the chidren is interested into, and then pass that down. This is my preferred approach.
 
 
-## 7. React DevTools
+## 8. React DevTools
 
 Some tricks:
 
@@ -423,7 +427,7 @@ Some tricks:
 - iframes and Chrome extensions don’t work with React Dev Tools as of writing.
 
 
-## 8. Redux
+## 9. Redux
 
 With `redux`:
 
@@ -434,7 +438,8 @@ With `redux`:
 	- Takes a tree and parameter(s)
 	- Returns a new tree after applying whatever transformations it deems fit.
 
-## 9. Redux DevTools
+
+## 10. Redux DevTools
 
 ### 1. Add `middleware` to `redux` that hooks into the DevTools
 
@@ -486,6 +491,7 @@ Open `localhost:5050` in your browser.
   "watch": "webpack -d --watch",
   "server": "http-server -p 5050 ./",
 ```
+
 
 ## 10. Testing Redux
 
