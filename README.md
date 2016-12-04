@@ -222,7 +222,8 @@ module.exports = {
     filename: 'bundle.js'
   },
   devServer: {
-    publicPath: '/public/'
+    publicPath: '/public/',
+    historyApiFallback: true
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json']
@@ -304,17 +305,6 @@ Our app is going to have:
 - a video page
 
 All CSS is pre-done.
-
-### Radium
-
-- Allow you to do all of your styles in JS.
-- Stop concerning about how your styles (`PostCSS` / `Sass` / `Less`) compile down to `CSS`.
-- `React` and `Radium` handle all the styles for you.
-
-### React-Router
-
-- Use the `Link` component to link between routes.
-- Use nested routes and an `IndexRoute` to have a common layout between all of the pages.
 
 ### React Approach to UIs
 
