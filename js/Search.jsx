@@ -1,5 +1,6 @@
 import React from 'react'
 import ShowCard from './ShowCard'
+import Header from './Header'
 import preload from '../public/data'
 
 class Search extends React.Component {
@@ -25,14 +26,9 @@ class Search extends React.Component {
 
     return (
       <div className='search'>
-        <header>
-          <h1>Basic Netflix XP v2</h1>
-          <input
-            type='text' placeholder='Search'
-            onChange={this.handleSearchTermChange}
-            value={this.state.searchTerm}
-            />
-        </header>
+        <Header
+          handleSearchTermChange={this.handleSearchTermChange}
+          searchTerm={this.state.searchTerm} />
         <div>
           {preload.shows
             .filter(showMatchesSearchTerm)
