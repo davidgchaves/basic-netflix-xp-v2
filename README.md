@@ -9,6 +9,11 @@
 ✔ npm run server
 ```
 
+For development:
+
+```console
+✔ npm run dev
+```
 
 ## TODO v1
 
@@ -61,7 +66,7 @@
 
 The goal of this workshop is to get you full up to speed on modern development and give you an idea what it is like to develop an app in the `react` ecosystem.
 
-In addition to `react`, we are going to be using `node`, `express`, `redux`, `webpack`, `mocha`, `enzyme`, `npm`, and `react-router`.
+In addition to `react`, we are going to be using `node`, `express`, `redux`, `webpack`, `jest`, `enzyme`, `npm`, and `react-router`.
 
 
 ## 1. Tooling
@@ -356,6 +361,25 @@ const Search = () => (
 - If a component has `state`, that `state` cannot be mutated by a parent, child, or any other external influence.
 - The only way to (sanely) mutate `state` is through the `setState` method.
 
+#### `forceUpdate` vs `setState`
+
+- `forceUpdate` kicks off a re-render.
+- `setState` updates the state and schedules a re-render.
+
+Integrating with other libraries (D3, jQuery) is almost the only reason to use `forceUpdate`.
+
+#### How React handles keypresses and re-renders?
+
+1. Every time a key is pressed, an event is fired.
+2. React is listening to those events and when a keypress happens (for example), React kicks off a re-render.
+3. If as a consequence of the event fired, we are not modifying the `state`, then the re-render renders the same `state` as before.
+4. We need to modify the `state` with `setState` when the event is fired.
+5. Remember that your `state` object is the source of truth.
+
+#### React Synthetic DOM Events
+
+- respect the same API as a *real*  event.
+
 ### mutating parent's `state`
 
 A parent component has the ability to expose functions to children so the child can invoke them and let the parent know it should mutate its `state`:
@@ -489,18 +513,20 @@ Open `localhost:5050` in your browser.
   "start": "npm run build",
   "build": "webpack -d",
   "watch": "webpack -d --watch",
-  "server": "http-server -p 5050 ./",
+  "server": "http-server -p 5050 ./"
+}
 ```
 
 
-## 10. Testing Redux
+## 11. Testing Redux
 
 ### Brian's theory about unit testing and Redux
 
 - *As opposed to testing React which I don't do much of, I test the hell out of my redux code*.
 - *Redux code is very testable and you should cover all or nearly-all of your reducers with tests*.
 
-## 11. Universal Rendering
+
+## 12. Universal Rendering
 
 - Quite straightforward with just vanilla React.
 - Not quite so simple once you introduce `react-router` into the mix:
@@ -679,8 +705,8 @@ res
   .send(template(readFileSync('./index.html'))({body}))
 ```
 
-## 12. Lifecycle of a React component (universal)
 
+## 13. Lifecycle of a React component (universal)
 
 ### 1st. `constructor`
 
@@ -709,7 +735,8 @@ res
 	- get rid of external event listeners
 	- clean up in general
 
-## 13. Webpack Chunking and Async Routing
+
+## 14. Webpack Chunking and Async Routing
 
 Serve **just** the JavaScript you need for the current page:
 
