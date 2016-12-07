@@ -1,10 +1,9 @@
 import React from 'react'
+import Header from './Header'
 
 const Details = ({ show: { description, poster, title, trailer, year } }) => (
   <div className='details'>
-    <header>
-      <h1>Basic Netflix XP v2</h1>
-    </header>
+    <Header showSearch={false} />
     <section>
       <h1>{title}</h1>
       <h2>({year})</h2>
