@@ -481,8 +481,33 @@ There's at least 3 ways to do this:
 
 1. We could pass all the data and let the children select what she needs. This isn't great because the child is given an additional concern it doesn't need to have.
 2. We could create a `callback` in the parent that passes to the children, so she can ask for the data. This is slightly better but it's an odd API for getting data. Ideally we just hand down `props` and not a `callback`, especially since this isn't async.
-3. We could hook into `onEnter` `callback` (from `react-router`) for the route, grab the data that the chidren is interested into, and then pass that down. This is my preferred approach.
+3. We could filter the data that the children is interested into, and then pass it down through `<BrowserRouter>` and `<Match>` (from `react-router` v4) when creating the component with a lamdba. This is my preferred approach.
 
+Example of option 3:
+
+```javascript
+const App = () => (
+  <BrowserRouter>
+    <div className='app'>
+      <Match exactly pattern='/' component={Landing} />
+      {/* SIMPLE EXAMPLE */}
+      <Match
+        pattern='/search'
+        component={props => <Search shows={preload.shows} {...props} />} />
+      {/* COMPLEX EXAMPLE */}
+      <Match
+        pattern='/details/:id'
+        component={props =>
+          <Details
+            show={preload.shows.filter(s => props.params.id === s.imdbID)[0]}
+            {...props}
+          />
+        }
+      />
+    </div>
+  </BrowserRouter>
+)
+```
 
 ## 8. React DevTools
 

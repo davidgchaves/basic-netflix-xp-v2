@@ -11,10 +11,12 @@ const ShowCard = ({ description, poster, title, year }) => (
   </div>
 )
 
+const { string } = React.PropTypes
 ShowCard.propTypes = {
-  description: React.PropTypes.string.isRequired,
-  poster: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string.isRequired,
-  year: React.PropTypes.string.isRequired
+  description: string.isRequired,
+  poster: string.isRequired,
+  title: string.isRequired,
+  year: string.isRequired
 }
+
 export default ShowCard
