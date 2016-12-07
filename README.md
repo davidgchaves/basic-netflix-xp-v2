@@ -459,19 +459,19 @@ it('renders our brand', () => {
 *I don't test my UI code ever. My UI is ever shifting and in reality, I don't much care if my markup changes. I expect to as we design and iterate on the website. However I do test the hell out of my business logic which I'll separate into small modules.*
 
 
-## 7. Whatever
+## 7. Dealing with Data
 
 ### Sharing data
 
 - Do not make two `AJAX` requests to get the same data.
 - Share this state between components by pushing it up to the highest common ancestor component.
 
-### How to organize React methods in a component
+### How to organize React methods in an ES6 component
 
-1. `constructor`
-2. lifecycle methods like `componentDidUpdate`
-3. methods you create
-4. `render`
+1. `constructor`.
+2. Lifecycle methods like `componentDidUpdate`.
+3. Methods you create.
+4. `render`.
 
 Makes it easier to find things when you look for them.
 

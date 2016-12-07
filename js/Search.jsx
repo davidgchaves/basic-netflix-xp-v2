@@ -1,7 +1,6 @@
 import React from 'react'
 import ShowCard from './ShowCard'
 import Header from './Header'
-import preload from '../public/data'
 
 class Search extends React.Component {
   constructor (props) {
@@ -19,6 +18,7 @@ class Search extends React.Component {
   }
 
   render () {
+    const { shows } = this.props
     const showMatchesSearchTerm = show =>
       `${show.title} ${show.description}`
         .toUpperCase()
@@ -30,7 +30,7 @@ class Search extends React.Component {
           handleSearchTermChange={this.handleSearchTermChange}
           searchTerm={this.state.searchTerm} />
         <div>
-          {preload.shows
+          {shows
             .filter(showMatchesSearchTerm)
             .map(show => <ShowCard {...show} key={show.imdbID} />)
           }
@@ -38,6 +38,16 @@ class Search extends React.Component {
       </div>
     )
   }
+}
+
+const { arrayOf, shape, string } = React.PropTypes
+Search.propTypes = {
+  shows: arrayOf(
+    shape({
+      title: string.isRequired,
+      description: string.isRequired
+    }).isRequired
+  ).isRequired
 }
 
 export default Search
