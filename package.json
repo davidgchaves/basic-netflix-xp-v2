@@ -8,6 +8,9 @@
   "scripts": {
     "standard": "standard",
     "lint": "eslint js/**/*.js js/**/*.jsx webpack.config.js",
+    "test": "NODE_ENV=test jest --config .jestrc",
+    "update-test": "npm run test -- -u",
+    "coverage": "npm run test -- --coverage",
     "dev": "webpack-dev-server",
     "build": "webpack",
     "watch": "webpack --watch"

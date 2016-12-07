@@ -127,7 +127,12 @@ It is ok to use presets:
   "presets": [
     "react",
     ["es2015", { "modules": false, "loose": true }]
-  ]
+  ],
+  "env": {
+    "test": {
+      "plugins": ["transform-es2015-modules-commonjs"]
+    }
+  }
 }
 ```
 
@@ -390,12 +395,53 @@ A parent component has the ability to expose functions to children so the child 
 
 ## 6. Testing
 
-### Setup
+### Setup Snapshot Testing with `Jest`
 
-We need:
+Add `Jest` configuration to `package.json`
 
-- `JSX` / `ES6` transpilation to happen or our tests will crash on the unfamiliar syntax.
-- A fake `DOM` for `React` to interact with.
+```json
+"jest": {
+  "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js|jsx)$",
+  "moduleFileExtensions": ["js", "json", "jsx"]
+}
+```
+
+or use an external `.jestrc` config file:
+
+```json
+{
+  "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(js|jsx)$",
+  "moduleFileExtensions": ["js", "json", "jsx"]
+}
+```
+
+and let `Jest` know about it:
+
+```console
+✔ NODE_ENV=test ./node_modules/.bin/jest --config .jestrc
+```
+
+### Renderers
+
+- `renderer` from `react-test-renderer`:
+  - Renders the whole tree.
+  - Great for *integration (cucumber-like) testing*.
+  - Slow!
+- `shallow` from `enzyme`:
+  - Allows shallow rendering.
+  - Great for testing components in isolation.
+  - Relatively fast.
+
+**GOTCHA**:
+
+- `renderer` and `shallow` are incompatible with each other.
+- If you want to use both (integration and unit) place them in different files.
+- Nonetheless I still have problems with `--coverage` failing.
+
+```javascript
+import renderer from 'react-test-renderer'
+import { shallow } from 'enzyme'
+```
 
 ### Enzyme trick
 
