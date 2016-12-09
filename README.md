@@ -208,7 +208,7 @@ We need two loaders to load CSS:
 - The `style-loader` takes the finished, parsed CSS and then bundles that into your JS bundle.
 - The `css-loader` lets `webpack` understand CSS (without it `webpack` doesn't parse CSS).
 - You could just as easy put the `less-loader` or `postcss-loader` instead of the `css-loader` if you wanted to have an augmented CSS language to work with.
-- The `{ url: false }` option for the `css-loader` is so that the `css-loader` doesn’t attempt to bundle your images into your JS bundle too.
+- The `{ url: false }` option for the `css-loader` is so that the `css-loader` doesn't attempt to bundle your images into your JS bundle too.
 - **GOTCHA**: All our CSS is going to be in `bundle.js`:
   - You have to wait for you js to load before your css load.
   - NOT A GOOD IDEA.
@@ -586,7 +586,7 @@ Some tricks:
 	- 0 is the last one you selected,
 	- 1 is the penultimate,
 	- and so on.
-- iframes and Chrome extensions don’t work with React Dev Tools as of writing.
+- iframes and Chrome/Firefox extensions don't work with React Dev Tools as of writing.
 
 
 ## 11. Redux
