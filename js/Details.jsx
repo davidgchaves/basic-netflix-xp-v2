@@ -21,7 +21,7 @@ class Details extends React.Component {
     const { description, poster, title, trailer, year } = this.props.show
     const rating = this.state.omdbData.imdbRating
       ? <h3>{this.state.omdbData.imdbRating}</h3>
-      : <img src='/public/img/loading.png' alt='loading indicator' />
+      : <img className='loading' src='/public/img/loading.png' alt='loading indicator' />
 
     return (
       <div className='details'>
