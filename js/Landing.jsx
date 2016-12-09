@@ -8,10 +8,16 @@ class Landing extends React.Component {
     super(props)
 
     this.handleSearchTermChange = this.handleSearchTermChange.bind(this)
+    this.handleSearchSubmit = this.handleSearchSubmit.bind(this)
   }
 
   handleSearchTermChange (event) {
     this.props.dispatch(setSearchTerm(event.target.value))
+  }
+
+  handleSearchSubmit (event) {
+    event.preventDefault()
+    this.context.router.transitionTo('/search')
   }
 
   render () {
@@ -20,14 +26,19 @@ class Landing extends React.Component {
     return (
       <div className='landing'>
         <h1>Basic NetFlix XP v2</h1>
-        <input onChange={this.handleSearchTermChange} value={searchTerm} type='text' />
-        <Link to='/search'>or Browse All</Link>
+        <form onSubmit={this.handleSearchSubmit}>
+          <input onChange={this.handleSearchTermChange} value={searchTerm} type='text' />
+          <Link to='/search'>or Browse All</Link>
+        </form>
       </div>
     )
   }
 }
 
-const { func, string } = React.PropTypes
+const { func, object, string } = React.PropTypes
+Landing.contextTypes = {
+  router: object.isRequired
+}
 Landing.propTypes = {
   dispatch: func.isRequired,
   searchTerm: string.isRequired
