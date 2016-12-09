@@ -1,7 +1,7 @@
 import { SET_SEARCH_TERM } from './actions'
 
 const DEFAULT_MODEL = {
-  searchTerm: 'Search here...'
+  searchTerm: ''
 }
 
 const setSearchTerm = (model, { searchTerm }) =>

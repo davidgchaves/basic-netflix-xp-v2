@@ -27,7 +27,10 @@ class Landing extends React.Component {
       <div className='landing'>
         <h1>Basic NetFlix XP v2</h1>
         <form onSubmit={this.handleSearchSubmit}>
-          <input onChange={this.handleSearchTermChange} value={searchTerm} type='text' />
+          <input
+            onChange={this.handleSearchTermChange}
+            value={searchTerm}
+            type='text' placeholder='Search...' />
           <Link to='/search'>or Browse All</Link>
         </form>
       </div>
