@@ -608,24 +608,16 @@ With `redux`:
 `Store.js`
 
 ```javascript
-import { createStore, compose } from 'redux'
-
-import reducer from './Reducer'
-import { INITIAL_STATE } from './Constants'
+import { compose, createStore } from 'redux'
+import rootReducer from './reducers'
 
 const reduxDevTools = () => (
-  (typeof window === 'object' &&
-   typeof window.devToolsExtension !== 'undefined'
-  )
+  typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
     ? window.devToolsExtension()
     : (f) => f
 )
 
-const store = createStore(
-  reducer,
-  INITIAL_STATE,
-  compose(reduxDevTools())
-)
+const store = createStore(rootReducer, compose(reduxDevTools))
 
 export default store
 ```
