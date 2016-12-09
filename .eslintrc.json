@@ -1,4 +1,7 @@
 {
   "extends": ["standard", "standard-react"],
-  "env": { "jest": true }
+  "env": {
+    "browser": true,
+    "jest": true
+  }
 }

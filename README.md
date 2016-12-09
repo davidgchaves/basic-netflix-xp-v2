@@ -509,7 +509,74 @@ const App = () => (
 )
 ```
 
-## 8. React DevTools
+
+## 8. Lifecycle of a React component
+
+### 1st. `constructor`
+
+- Set up your components initial state.
+- Runs:
+	- In `node`
+	- In the browser
+
+### 2nd. `componentWillMount`
+
+- Runs right **before** the component gets mounted.
+- Great place for:
+  - Share code between `node` and the browser.
+- Runs:
+	- In `node`
+	- In the browser
+
+### 3rd. `componentDidMount`
+
+- Runs right **after** your component gets put into the DOM.
+- The idea: render first then go get the data.
+- Great place for:
+  - interact with the `DOM`
+  - `AJAX`
+	- setup external event listeners
+	- wrap `D3`
+	- wrap a `jQuery` plugin
+- Runs in the browser
+- **DOES NOT** run in `node`
+
+### 4th. `componentWillUnmount`
+
+- Runs right before the component is taken off the DOM.
+- Great place for:
+	- dispose external event listeners
+	- clean up in general
+- Runs in the browser
+- **DOES NOT** run in `node`
+
+### `shouldComponentUpdate` (only for performance)
+
+- React triggers re-renders when the component data (`state` and/or `props`) change:
+- The mechanism for *diffing* the data can be expensive (slow) on **deeply nested data**.
+- React gives you an escape patch for this kind of situations: `shouldComponentUpdate`.
+
+**DO NOT** use `shouldComponentUpdate` unless you tested your performance and the situation described above is the root of your problem.
+
+
+## 9. React Performance Tools
+
+Visual tool for checking where your application is waisting render cycles.
+
+It has 3 different metrics:
+
+- `Print Inclusive`: includes Lifecycle Methods.
+- `Print Exclusive`: excludes Lifecycle Methods.
+- `Print Wasted`: shows where you are wasting time (unnecessary renders, ...)
+
+Check the [Official Docs](https://facebook.github.io/react/docs/perf.html).
+
+### Performance tip
+
+Avoid putting SVGs into React components. If you can, leave them outside of React.
+
+
+## 10. React DevTools
 
 Some tricks:
 
@@ -522,7 +589,7 @@ Some tricks:
 - iframes and Chrome extensions don’t work with React Dev Tools as of writing.
 
 
-## 9. Redux
+## 11. Redux
 
 With `redux`:
 
@@ -534,7 +601,7 @@ With `redux`:
 	- Returns a new tree after applying whatever transformations it deems fit.
 
 
-## 10. Redux DevTools
+## 12. Redux DevTools
 
 ### 1. Add `middleware` to `redux` that hooks into the DevTools
 
@@ -589,7 +656,7 @@ Open `localhost:5050` in your browser.
 ```
 
 
-## 11. Testing Redux
+## 13. Testing Redux
 
 ### Brian's theory about unit testing and Redux
 
@@ -597,7 +664,7 @@ Open `localhost:5050` in your browser.
 - *Redux code is very testable and you should cover all or nearly-all of your reducers with tests*.
 
 
-## 12. Universal Rendering
+## 14. Universal Rendering
 
 - Quite straightforward with just vanilla React.
 - Not quite so simple once you introduce `react-router` into the mix:
@@ -777,37 +844,7 @@ res
 ```
 
 
-## 13. Lifecycle of a React component (universal)
-
-### 1st. `constructor`
-
-- Set up your components initial state.
-- Runs:
-	- In `node`
-	- In the browser
-
-### 2nd. `componentWillMount`
-
-- Runs right **before** the component gets mounted.
-- Use it any time you want code to run both in node and in the browser.
-
-### 3rd. `componentDidMount`
-
-- Runs right **after** your component gets put into the DOM.
-- Will not get run in node but will in the browser.
-- The idea: render first then go get the data.
-- Great place for interact with the `DOM`:
-	- wrap `D3`
-	- wrap a `jQuery` plugin
-
-### 4th. `componentWillUnmount`
-
-- Runs right before the component is taken off the DOM. - Great place for:
-	- get rid of external event listeners
-	- clean up in general
-
-
-## 14. Webpack Chunking and Async Routing
+## 15. Webpack Chunking and Async Routing
 
 Serve **just** the JavaScript you need for the current page:
 
