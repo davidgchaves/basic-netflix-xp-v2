@@ -5,8 +5,7 @@
 ```console
 ✔ npm install --global yarn
 ✔ yarn
-✔ npm run build
-✔ npm run server
+✔ npm run watch && npm run server
 ```
 
 For development:
@@ -708,172 +707,57 @@ test('SET_SEARCH_TERM', () => {
 
 The big key with Universal Rendering is being careful about referencing `window` and `document` as those aren't available in `node` environments.
 
-If you need to interact with them:
+### Running the App
 
-```node
-if (window) { /* do stuff with window*/ }
+Run in your CLI:
+
+```console
+✔ npm run watch && npm run server
 ```
 
-### A basic `express` server
+### A basic universal `express` server
 
-```node
-import React from 'react'
-import ReactDOMServer from 'react-dom/server'
-import template from 'lodash.template'
-import express from 'express'
-import { match, RouterContext } from 'react-router'
-import { Provider } from 'react-redux'
-import { readFileSync } from 'fs'
+```javascript
+require('babel-register')
+const React = require('react')
+const ReactDOMServer = require('react-dom/server')
+const ReactRouter = require('react-router')
+const _template = require('lodash.template')
+const express = require('express')
+const ServerRouter = ReactRouter.ServerRouter
+const fs = require('fs')
 
-import store from './src/Store'
-import routes from './src/routes'
+const App = require('./js/App').default
 
 const port = 5050
-const baseTemplate = readFileSync('./index.html')
-const app = express()
+const baseTemplate = fs.readFileSync('./index.html')
+const server = express()
 
-app.use('/public', express.static('./public'))
+server.use('/public', express.static('./public'))
 
-app.use((req, res) => {
-  match(
-    {routes: routes(), location: req.url},
-    (error, redirectLocation, renderProps) => {
-      if (error) {
-        res
-          .status(500)
-          .send(error.message)
-      } else if (redirectLocation) {
-        res.redirect(
-          302,
-          `${redirectLocation.pathname}${redirectLocation.Search}`
-        )
-      } else if (renderProps) {
-        const body = ReactDOMServer.renderToString(
-          React.createElement(
-            Provider,
-            {store},
-            React.createElement(RouterContext, renderProps)
-          )
-        )
-        res
-          .status(200)
-          .send(template(baseTemplate)({body}))
-      } else {
-        res
-          .status(404)
-          .send('Not found')
-      }
-    }
-  )
-})
-
-console.log(`Listening on ${port}`)
-app.listen(port)
-```
-
-### A basic `express` server commented
-
-#### 1. Match routes on the server
-
-Use `react-router`'s `match` with the route to match and the url
-
-```node
-import { match } from 'react-router'
-
-app.use((req, res) => {
-  match(
-    {routes: routes(), location: req.url},
-    (error, redirectLocation, renderProps) => { .... }
-  )
-})
-```
-
-#### 2. Check for `500`s
-
-```node
-(error, redirectLocation, renderProps) => {
-  if (error) {
-    res
-      .status(500)
-      .send(error.message)
-  } else if (redirectLocation) { .... }
-})
-```
-
-#### 3. Check for `300`s
-
-```node
-(error, redirectLocation, renderProps) => {
-  ....
-  if (redirectLocation) {
-    res.redirect(
-      302,
-      `${redirectLocation.pathname}${redirectLocation.Search}`
-    )
-  } else if (renderProps) { .... }
-})
-```
-
-#### 4. Check for `200`s
-
-```node
-const baseTemplate = readFileSync('./index.html')
-
-(error, redirectLocation, renderProps) => {
-  ....
-  if (renderProps) {
-    const body = ReactDOMServer.renderToString(
+server.use((req, res) => {
+  const context = ReactRouter.createServerRenderContext()
+  const body = ReactDOMServer.renderToString(
+    React.createElement(
+      ServerRouter,
+      { location: req.url, context: context },
       React.createElement(
-        Provider,
-        {store},
-        React.createElement(RouterContext, renderProps)
+        App
       )
     )
-    res
-      .status(200)
-      .send(template(baseTemplate)({body}))
-  } else { .... }
-})
-```
-
-#### 5. If there's no match, then `404`
-
-```node
-(error, redirectLocation, renderProps) => {
-  ....
-  if (renderProps) { ....
-  } else {
-    res
-      .status(404)
-      .send('Not found')
-  }
-})
-```
-
-#### `200` in detail
-
-##### Generate `body`
-
-Generate the `body` with `ReactDOMServer`'s `renderToString` (render our app out to a string instead of to the DOM)
-
-```node
-const body = ReactDOMServer.renderToString(
-  React.createElement(
-    Provider,
-    {store},
-    React.createElement(RouterContext, renderProps)
   )
+  res.write(_template(baseTemplate)({body}))
+  res.end()
+})
+
+server.listen(
+  port,
+  () => {
+    console.log()
+    console.log(`  🚀   Listening on ${port}  🚀  `)
+    console.log()
+  }
 )
-```
-
-##### Attach it to the markup
-
-Use `lodash.template` to template our rendered string into the `index.html` markup
-
-```node
-res
-  .status(200)
-  .send(template(readFileSync('./index.html'))({body}))
 ```
 
 
