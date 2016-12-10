@@ -35,4 +35,5 @@ Search.propTypes = {
 
 const mapModelToProps = ({ searchTerm }) => ({ searchTerm })
 
+export const UnwrappedSearch = Search
 export default connect(mapModelToProps)(Search)
