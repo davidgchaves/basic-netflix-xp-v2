@@ -1,12 +1,18 @@
-import { compose, createStore } from 'redux'
+import { compose, createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
 import rootReducer from './reducers'
 
-const reduxDevTools = () => (
+const reduxDevTools = () =>
   typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
     ? window.devToolsExtension()
     : (f) => f
-)
 
-const store = createStore(rootReducer, compose(reduxDevTools()))
+const store = createStore(
+  rootReducer,
+  compose(
+    applyMiddleware(thunk),
+    reduxDevTools()
+  )
+)
 
 export default store

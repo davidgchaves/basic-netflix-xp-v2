@@ -601,23 +601,31 @@ With `redux`:
 	- Returns a new tree after applying whatever transformations it deems fit.
 
 
-## 12. Redux DevTools
+## 12. TODO: REVIEW (Redux DevTools)
+
+[Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 
 ### 1. Add `middleware` to `redux` that hooks into the DevTools
 
-`Store.js`
+`store.js`
 
 ```javascript
-import { compose, createStore } from 'redux'
+import { compose, createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
 import rootReducer from './reducers'
 
-const reduxDevTools = () => (
+const reduxDevTools = () =>
   typeof window === 'object' && typeof window.devToolsExtension !== 'undefined'
     ? window.devToolsExtension()
     : (f) => f
-)
 
-const store = createStore(rootReducer, compose(reduxDevTools))
+const store = createStore(
+  rootReducer,
+  compose(
+    applyMiddleware(thunk),
+    reduxDevTools()
+  )
+)
 
 export default store
 ```

@@ -1,26 +1,23 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import Header from './Header'
+import { getOMDBDetails } from './actionCreators'
 
 class Details extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = { omdbData: {} }
-  }
-
   componentDidMount () {
-    const omdbApi = `http://www.omdbapi.com/?i=${this.props.show.imdbID}`
+    const imdbRatingIsNotLoaded = !this.props.omdbData.imdbRating
+    const loadImdbRating =
+      () => this.props.dispatch(getOMDBDetails(this.props.show.imdbID))
 
-    fetch(omdbApi)
-      .then(res => res.json())
-      .then(json => this.setState({ omdbData: json }))
-      .catch(err => console.error('fetch error:', err))
+    if (imdbRatingIsNotLoaded) {
+      loadImdbRating()
+    }
   }
 
   render () {
     const { description, poster, title, trailer, year } = this.props.show
-    const rating = this.state.omdbData.imdbRating
-      ? <h3>{this.state.omdbData.imdbRating}</h3>
+    const rating = this.props.omdbData.imdbRating
+      ? <h3>{this.props.omdbData.imdbRating}</h3>
       : <img className='loading' src='/public/img/loading.png' alt='loading indicator' />
 
     return (
@@ -44,8 +41,12 @@ class Details extends React.Component {
   }
 }
 
-const { shape, string } = React.PropTypes
+const { func, shape, string } = React.PropTypes
 Details.propTypes = {
+  dispatch: func.isRequired,
+  omdbData: shape({
+    imdbID: string
+  }).isRequired,
   show: shape({
     description: string.isRequired,
     imdbID: string,
@@ -56,4 +57,8 @@ Details.propTypes = {
   }).isRequired
 }
 
-export default Details
+const mapModelToProps = ({ omdbData }, { show: { imdbID } }) => ({
+  omdbData: omdbData[imdbID] ? omdbData[imdbID] : {}
+})
+
+export default connect(mapModelToProps)(Details)
