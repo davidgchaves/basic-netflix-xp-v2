@@ -1,10 +1,11 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { BrowserRouter } from 'react-router'
 import App from './App'
-import '../public/normalize.css'
-import '../public/style.css'
 
 render(
-  <App />,
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
   document.getElementById('app')
 )
