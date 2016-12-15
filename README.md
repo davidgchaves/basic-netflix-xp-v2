@@ -5,14 +5,29 @@
 ```console
 ✔ npm install --global yarn
 ✔ yarn
-✔ npm run watch && npm run server
 ```
 
-For development:
+### Server-side rendering
+
+Run in your CLI:
+
+```console
+✔ npm run watch
+✔ npm run start
+```
+
+and connect to `port` 5050.
+
+### Development (Front-End Only)
+
+Run in your CLI:
 
 ```console
 ✔ npm run dev
 ```
+
+and connect to `port` 8080.
+
 
 ## TODO v1
 
@@ -81,6 +96,7 @@ Instead of:
 
 - `npm install`, run `yarn`.
 - `npm install --save react`, run `yarn add react`.
+- `npm install --save-dev react`, run `yarn add --dev react`.
 - `npm install --global nodemon`, run `yarn global add nodemon`.
 
 Rule of thumb:
@@ -709,11 +725,26 @@ The big key with Universal Rendering is being careful about referencing `window`
 
 ### Running the App
 
+`package.json`
+
+``` json
+  "scripts": {
+    "watch": "webpack --watch",
+    "start": "NODE_ENV=server nodemon server.js"
+  }
+```
+
 Run in your CLI:
 
 ```console
-✔ npm run watch && npm run server
+✔ npm run watch
+✔ npm run start
 ```
+
+and connect:
+
+- to your `express` server (`localhost:5050` in our case)
+- not to `webpack-dev-server` (`localhost:8080` in our case)
 
 ### A basic universal `express` server
 
@@ -765,13 +796,18 @@ server.listen(
 
 Serve **just** the JavaScript you need for the current page:
 
-- Use webpack's async loading API (`require.ensure`)
+- Use webpack's `System.import` async loading API.
 - Webpack is able to download the chunks as we need them.
 - Identify the modules that can be async.
 - Treat all of our routes as async (`react-router` is already instrumented for this, server and client-side).
+- Remember to connect to your `express` server (and not to your `webpack-dev-server`)
 
-### ES6 vs CommonJS Modules
+### Quick and Dirty Way to Shim `System.import` out
 
-There's some weird errors going on if you use ES6 modules (as I do) and `require.ensure` (the need to suffix all `require('./whatever')` with `.default`) at the same time.
+Node doesn't have `System.import` (it's tied to the new ES6 module system which Node doesn't have yet)
 
-I think that if you want to remain sane and need to use webpack's `require.ensure`, just go with CommonJS modules all the way, and avoid ES6 modules.
+``` javascript
+if (global) {
+  global.System = { import () {} }
+}
+```
