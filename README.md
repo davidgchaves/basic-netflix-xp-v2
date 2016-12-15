@@ -889,3 +889,86 @@ Time: 6407ms
   bundle.js   219 kB       3  [emitted]  main
     + 232 hidden modules
 ```
+
+
+## 17. Preact
+
+You need to modify:
+
+- `webpack.config.js`
+- `express` server (for Server-side Rendering)
+
+Gotcha: Use `preact-compat` if you want your `propTypes` to work.
+
+### Modify `webpack.config.js`
+
+```javascript
+  resolve: {
+    extensions: ['.js', '.jsx', '.json'],
+    alias: {
+      react: 'preact-compat',
+      'react-dom': 'preact-compat'
+    }
+  },
+  {
+    include: [
+      path.resolve(__dirname, 'js'),
+      path.resolve('node_modules/preact-compat/src')
+    ],
+    test: /\.jsx?$/,
+    loader: 'babel-loader'
+  },
+```
+
+### Modify your `express` server
+
+Using React:
+
+```javascript
+const ReactDOMServer = require('react-dom/server')
+
+/* ... */
+
+ReactDOMServer.renderToString( /* ... */ )
+```
+
+Using Preact:
+
+```javascript
+const preactRenderToString = require('preact-render-to-string')
+
+/* ... */
+
+preactRenderToString( /* ... */)
+```
+
+### Using `preact-compat`
+
+```console
+❯ NODE_ENV=production webpack -p
+
+Hash: c666fffa47e3593cafd0
+Version: webpack 2.1.0-beta.25
+Time: 4792ms
+          Asset       Size  Chunks             Chunk Names
+    0.bundle.js    3.56 kB       0  [emitted]
+    1.bundle.js    4.18 kB       1  [emitted]
+    2.bundle.js    2.19 kB       2  [emitted]
+      bundle.js    96.8 kB       3  [emitted]  main
+    + 75 hidden modules
+```
+
+### Using `preact`
+
+```console
+❯ NODE_ENV=production webpack -p
+Hash: e985d191d65ae690efbd
+Version: webpack 2.1.0-beta.25
+Time: 3708ms
+          Asset       Size  Chunks             Chunk Names
+    0.bundle.js    3.47 kB       0  [emitted]
+    1.bundle.js    4.07 kB       1  [emitted]
+    2.bundle.js    2.16 kB       2  [emitted]
+      bundle.js    81.6 kB       3  [emitted]  main
+    + 72 hidden modules
+```
