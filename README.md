@@ -806,8 +806,86 @@ Serve **just** the JavaScript you need for the current page:
 
 Node doesn't have `System.import` (it's tied to the new ES6 module system which Node doesn't have yet)
 
-``` javascript
+```
 if (global) {
   global.System = { import () {} }
 }
+```
+
+
+## 16. Building for Production Tips
+
+[Building for Production Webpack Official Guide](https://webpack.js.org/guides/production-build/)
+
+`package.json`
+
+``` json
+  "scripts": {
+    "build": "webpack"
+  }
+```
+
+### Before
+
+```console
+❯ npm run build
+
+Hash: 237b050b47e615b5834d
+Version: webpack 2.1.0-beta.25
+Time: 3503ms
+      Asset     Size  Chunks             Chunk Names
+0.bundle.js  10.7 kB       0  [emitted]
+1.bundle.js  11.1 kB       1  [emitted]
+2.bundle.js  5.71 kB       2  [emitted]
+  bundle.js   985 kB       3  [emitted]  main
+    + 241 hidden modules
+```
+
+### 1. Source Maps for Production
+
+Switch to `devtool: 'cheap-module-source-map'`
+
+```console
+❯ npm run build
+
+Hash: 1a5a5dd016de1077fe5c
+Version: webpack 2.1.0-beta.25
+Time: 3615ms
+          Asset     Size  Chunks             Chunk Names
+    0.bundle.js  9.87 kB       0  [emitted]
+    1.bundle.js  10.4 kB       1  [emitted]
+    2.bundle.js  5.28 kB       2  [emitted]
+      bundle.js   912 kB       3  [emitted]  main
+    + 241 hidden modules
+```
+
+### 2. Production Environment with Minification
+
+```javascript
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: true
+      }
+    })
+  ],
+```
+
+```console
+❯ npm run build
+
+Hash: edb4ecc442319bcb340d
+Version: webpack 2.1.0-beta.25
+Time: 6407ms
+      Asset     Size  Chunks             Chunk Names
+0.bundle.js  3.44 kB       0  [emitted]
+1.bundle.js  4.04 kB       1  [emitted]
+2.bundle.js  2.13 kB       2  [emitted]
+  bundle.js   219 kB       3  [emitted]  main
+    + 232 hidden modules
 ```
